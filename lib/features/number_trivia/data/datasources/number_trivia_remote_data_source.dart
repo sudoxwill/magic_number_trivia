@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:number_trivia/core/error/exception.dart';
 import 'package:number_trivia/core/error/exceptions_mapper.dart';
 import 'package:number_trivia/core/network/network_info.dart';
 import 'package:number_trivia/features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
@@ -28,12 +29,18 @@ class NumberTriviaRemoteDataSourceImpl implements NumberTriviaRemoteDataSource {
           options: Options(headers: {'Accept': 'application/json'}),
         );
         final data = response.data as Map<String, dynamic>;
+        if (!data['found']) {
+          throw NotFoundException(); // Pas nécessaire mais pourquoi pas...
+        }
         final numberTrivia = NumberTriviaModel.fromJson(data);
         numberTriviaLocalDataSource.cacheNumberTrivia(numberTrivia);
         return numberTrivia;
       } else {
         final numberTrivias = await numberTriviaLocalDataSource
             .getCachedNumberTrivias();
+        if (numberTrivias.isEmpty) {
+          throw NotFoundException();
+        }
         return numberTrivias.last;
       }
     } on DioException catch (e) {
@@ -50,12 +57,18 @@ class NumberTriviaRemoteDataSourceImpl implements NumberTriviaRemoteDataSource {
           options: Options(headers: {'Accept': 'application/json'}),
         );
         final data = response.data as Map<String, dynamic>;
+        if (!data['found']) {
+          throw NotFoundException(); // Pas nécessaire mais pourquoi pas...
+        }
         final numberTrivia = NumberTriviaModel.fromJson(data);
         numberTriviaLocalDataSource.cacheNumberTrivia(numberTrivia);
         return numberTrivia;
       } else {
         final numberTrivias = await numberTriviaLocalDataSource
             .getCachedNumberTrivias();
+        if (numberTrivias.isEmpty) {
+          throw NotFoundException();
+        }
         return numberTrivias.last;
       }
     } on DioException catch (e) {

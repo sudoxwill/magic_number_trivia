@@ -8,8 +8,9 @@ class GetConcreteNumberTrivia extends Usecase<NumberTrivia, int> {
 
   GetConcreteNumberTrivia(this.numberTriviaRepository);
   @override
-  Future<NumberTrivia> call(int number) async {
-    if (number < 0) throw FormatFailure();
-    return numberTriviaRepository.getConcreteNumberTrivia(number);
+  Future<NumberTrivia> call(dynamic number) async {
+    // dynamic au lieu de int fait expres
+    if (number is! int || number < 0) throw FormatFailure();
+    return await numberTriviaRepository.getConcreteNumberTrivia(number);
   }
 }

@@ -12,7 +12,7 @@ class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
   @override
   Future<NumberTrivia> getConcreteNumberTrivia(int number) async {
     try {
-      return numberTriviaRemoteDataSource.getConcreteNumberTrivia(number);
+      return await numberTriviaRemoteDataSource.getConcreteNumberTrivia(number);
     } on CustomException catch (e) {
       throw fromExceptionToFailure(e);
     } catch (e) {
@@ -23,7 +23,7 @@ class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
   @override
   Future<NumberTrivia> getRandomNumberTrivia() async {
     try {
-      return numberTriviaRemoteDataSource.getRandomNumberTrivia();
+      return await numberTriviaRemoteDataSource.getRandomNumberTrivia();
     } on CustomException catch (e) {
       throw fromExceptionToFailure(e);
     } catch (e) {

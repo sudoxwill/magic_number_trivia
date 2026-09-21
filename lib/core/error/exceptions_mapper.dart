@@ -24,3 +24,20 @@ Failure fromExceptionToFailure(CustomException e) {
     NotFoundException() => NotFoundFailure(),
   };
 }
+
+String fromFailureToString(Failure e) {
+  return switch (e) {
+    ServerFailure() => 'Le serveur est temporairement indisponible.',
+
+    NetworkFailure() =>
+      'Une connexion Internet est nécessaire pour effectuer cette opération.',
+
+    CacheFailure() => 'Impossible d’accéder aux données locales.',
+
+    NotFoundFailure() => 'La ressource demandée est introuvable.',
+
+    FormatFailure() => 'Les données reçues sont dans un format invalide.',
+
+    UnexpectedFailure() => 'Une erreur inattendue est survenue.',
+  };
+}

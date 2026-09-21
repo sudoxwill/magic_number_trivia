@@ -8,7 +8,7 @@ class GetRandomNumberTrivia extends Usecase<NumberTrivia, NoParam> {
   GetRandomNumberTrivia(this.numberTriviaRepository);
   @override
   Future<NumberTrivia> call(NoParam param) async {
-    return numberTriviaRepository.getRandomNumberTrivia();
+    return await numberTriviaRepository.getRandomNumberTrivia();
   }
 }
 
