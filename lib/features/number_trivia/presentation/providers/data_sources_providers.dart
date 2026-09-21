@@ -11,7 +11,6 @@ final numberTriviaLocalDataSourceProvider =
 final numberTriviaRemoteDataSourceProvider =
     Provider<NumberTriviaRemoteDataSource>((ref) {
       return NumberTriviaRemoteDataSourceImpl(
-        networkInfo: ref.watch(networkInfoProvider),
         numberTriviaLocalDataSource: ref.watch(
           numberTriviaLocalDataSourceProvider,
         ),

@@ -21,12 +21,12 @@ class NumberTriviaLocalDataSourceImpl implements NumberTriviaLocalDataSource {
       final stringData = hiveBox.get(CacheConstants.hiveAllNumbers);
       final data = jsonDecode(stringData ?? '[]') as List<dynamic>;
       final result = data.map((e) => NumberTriviaModel.fromJson(e)).toList();
-      result.add(numberTrivia);
+      result.insert(0, numberTrivia);
       await hiveBox.put(
         CacheConstants.hiveAllNumbers,
         jsonEncode(result.map((e) => e.toJson()).toList()),
       );
-    } on CacheException {
+    } catch (e) {
       throw CacheException();
     }
   }
@@ -37,7 +37,7 @@ class NumberTriviaLocalDataSourceImpl implements NumberTriviaLocalDataSource {
       final stringData = hiveBox.get(CacheConstants.hiveAllNumbers);
       final data = jsonDecode(stringData ?? '[]') as List<dynamic>;
       return data.map((e) => NumberTriviaModel.fromJson(e)).toList();
-    } on CacheException {
+    } catch (e) {
       throw CacheException();
     }
   }

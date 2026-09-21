@@ -36,7 +36,7 @@ String fromFailureToString(Failure e) {
 
     NotFoundFailure() => 'La ressource demandée est introuvable.',
 
-    FormatFailure() => 'Les données reçues sont dans un format invalide.',
+    FormatFailure() => 'L\'entrée saisie est dans un format invalide.',
 
     UnexpectedFailure() => 'Une erreur inattendue est survenue.',
   };

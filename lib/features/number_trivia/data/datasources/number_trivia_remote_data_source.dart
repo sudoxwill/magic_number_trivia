@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:number_trivia/core/error/exception.dart';
 import 'package:number_trivia/core/error/exceptions_mapper.dart';
-import 'package:number_trivia/core/network/network_info.dart';
 import 'package:number_trivia/features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
 import 'package:number_trivia/features/number_trivia/data/models/number_trivia_model.dart';
 
@@ -11,38 +10,27 @@ abstract class NumberTriviaRemoteDataSource {
 }
 
 class NumberTriviaRemoteDataSourceImpl implements NumberTriviaRemoteDataSource {
-  final NetworkInfo networkInfo;
   final NumberTriviaLocalDataSource numberTriviaLocalDataSource;
   final Dio dio;
 
   NumberTriviaRemoteDataSourceImpl({
-    required this.networkInfo,
     required this.numberTriviaLocalDataSource,
     required this.dio,
   });
   @override
   Future<NumberTriviaModel> getConcreteNumberTrivia(int number) async {
     try {
-      if (await networkInfo.isConnected()) {
-        final response = await dio.get(
-          '/$number',
-          options: Options(headers: {'Accept': 'application/json'}),
-        );
-        final data = response.data as Map<String, dynamic>;
-        if (!data['found']) {
-          throw NotFoundException(); // Pas nécessaire mais pourquoi pas...
-        }
-        final numberTrivia = NumberTriviaModel.fromJson(data);
-        numberTriviaLocalDataSource.cacheNumberTrivia(numberTrivia);
-        return numberTrivia;
-      } else {
-        final numberTrivias = await numberTriviaLocalDataSource
-            .getCachedNumberTrivias();
-        if (numberTrivias.isEmpty) {
-          throw NotFoundException();
-        }
-        return numberTrivias.last;
+      final response = await dio.get(
+        '/$number',
+        options: Options(headers: {'Accept': 'application/json'}),
+      );
+      final data = response.data as Map<String, dynamic>;
+      if (!data['found']) {
+        throw NotFoundException(); // Pas nécessaire mais pourquoi pas...
       }
+      final numberTrivia = NumberTriviaModel.fromJson(data);
+      numberTriviaLocalDataSource.cacheNumberTrivia(numberTrivia);
+      return numberTrivia;
     } on DioException catch (e) {
       throw fromDioToException(e);
     }
@@ -51,26 +39,17 @@ class NumberTriviaRemoteDataSourceImpl implements NumberTriviaRemoteDataSource {
   @override
   Future<NumberTriviaModel> getRandomNumberTrivia() async {
     try {
-      if (await networkInfo.isConnected()) {
-        final response = await dio.get(
-          '/random/trivia',
-          options: Options(headers: {'Accept': 'application/json'}),
-        );
-        final data = response.data as Map<String, dynamic>;
-        if (!data['found']) {
-          throw NotFoundException(); // Pas nécessaire mais pourquoi pas...
-        }
-        final numberTrivia = NumberTriviaModel.fromJson(data);
-        numberTriviaLocalDataSource.cacheNumberTrivia(numberTrivia);
-        return numberTrivia;
-      } else {
-        final numberTrivias = await numberTriviaLocalDataSource
-            .getCachedNumberTrivias();
-        if (numberTrivias.isEmpty) {
-          throw NotFoundException();
-        }
-        return numberTrivias.last;
+      final response = await dio.get(
+        '/random/trivia',
+        options: Options(headers: {'Accept': 'application/json'}),
+      );
+      final data = response.data as Map<String, dynamic>;
+      if (!data['found']) {
+        throw NotFoundException(); // Pas nécessaire mais pourquoi pas...
       }
+      final numberTrivia = NumberTriviaModel.fromJson(data);
+      numberTriviaLocalDataSource.cacheNumberTrivia(numberTrivia);
+      return numberTrivia;
     } on DioException catch (e) {
       throw fromDioToException(e);
     }

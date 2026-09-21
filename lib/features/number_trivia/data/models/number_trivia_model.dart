@@ -1,10 +1,12 @@
 import 'package:number_trivia/features/number_trivia/domain/entities/number_trivia.dart';
 
+// ignore: must_be_immutable
 class NumberTriviaModel extends NumberTrivia {
-  const NumberTriviaModel({
+  NumberTriviaModel({
     required super.text,
     required super.number,
     required super.found,
+    required super.isOnline,
   });
 
   factory NumberTriviaModel.fromJson(Map<String, dynamic> json) {
@@ -12,6 +14,7 @@ class NumberTriviaModel extends NumberTrivia {
       text: json['text'],
       number: json['number'],
       found: json['found'],
+      isOnline: json['isOnline'] ?? true,
     );
   }
 
@@ -19,5 +22,6 @@ class NumberTriviaModel extends NumberTrivia {
     'text': text,
     'number': number,
     'found': found,
+    'isOnline': false,
   };
 }

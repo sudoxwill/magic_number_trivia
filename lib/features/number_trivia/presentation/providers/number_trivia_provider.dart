@@ -8,11 +8,7 @@ import 'package:number_trivia/features/number_trivia/presentation/providers/usec
 
 class NumberTriviaNotifier extends AsyncNotifier<NumberTrivia?> {
   @override
-  FutureOr<NumberTrivia?> build() async {
-    final usecase = ref.read(getRandomNumberTriviaProvider);
-    ref.invalidate(historyProvider);
-    return await usecase(NoParam());
-  }
+  FutureOr<NumberTrivia?> build() async => null;
 
   Future<void> getConcreteNumberTrivia(dynamic number) async {
     final usecase = ref.read(getConcreteNumberTriviaProvider);
