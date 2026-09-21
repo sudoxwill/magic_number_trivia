@@ -15,6 +15,7 @@ class NumberTriviaPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final numberTriviaAsync = ref.watch(numberTriviaProvider);
+
     ref.listen<AsyncValue<NumberTrivia?>>(numberTriviaProvider, (
       previous,
       next,
@@ -55,9 +56,11 @@ class NumberTriviaPage extends ConsumerWidget {
             const SizedBox(height: 24),
             if (numberTriviaAsync.isLoading)
               Expanded(child: Center(child: CircularProgressIndicator()))
-            else if (numberTriviaAsync.value != null)
+            else if (numberTriviaAsync.hasValue)
               Expanded(
-                child: MessageDisplay(message: numberTriviaAsync.value!.text),
+                child: MessageDisplay(
+                  message: numberTriviaAsync.value?.text ?? '',
+                ),
               )
             else
               Expanded(
