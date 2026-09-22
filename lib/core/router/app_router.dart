@@ -10,6 +10,7 @@ final GoRouter appRouter = GoRouter(
       name: 'home',
       builder: (context, state) => const NumberTriviaPage(),
     ),
+
     GoRoute(
       path: '/history',
       name: 'history',

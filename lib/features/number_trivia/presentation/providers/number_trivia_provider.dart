@@ -10,6 +10,10 @@ class NumberTriviaNotifier extends AsyncNotifier<NumberTrivia?> {
   @override
   FutureOr<NumberTrivia?> build() async => null;
 
+  Future<void> showCachedTrivia(NumberTrivia numberTrivia) async {
+    state = AsyncValue.data(numberTrivia);
+  }
+
   Future<void> getConcreteNumberTrivia(dynamic number) async {
     final usecase = ref.read(getConcreteNumberTriviaProvider);
     state = AsyncValue.loading();

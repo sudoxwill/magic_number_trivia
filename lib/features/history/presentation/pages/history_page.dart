@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:number_trivia/features/history/presentation/providers/history_provider.dart';
 import 'package:number_trivia/features/history/presentation/widgets/history_tile.dart';
+import 'package:number_trivia/features/number_trivia/presentation/providers/number_trivia_provider.dart';
 
 class HistoryPage extends ConsumerWidget {
   const HistoryPage({super.key});
@@ -24,7 +28,12 @@ class HistoryPage extends ConsumerWidget {
                 itemBuilder: (ctx, index) => HistoryTile(
                   number: historyAsync.value![index].number,
                   text: historyAsync.value![index].text,
-                  onTap: () {},
+                  onTap: () {
+                    ref
+                        .read(numberTriviaProvider.notifier)
+                        .showCachedTrivia(historyAsync.value![index]);
+                    context.pop();
+                  },
                 ),
               ),
       ),
