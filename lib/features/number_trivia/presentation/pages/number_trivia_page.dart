@@ -3,21 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:number_trivia/core/error/exceptions_mapper.dart';
 import 'package:number_trivia/core/error/failure.dart';
-import 'package:number_trivia/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:number_trivia/features/number_trivia/presentation/providers/number_trivia_provider.dart';
 
 import '../widgets/message_display.dart';
 import '../widgets/trivia_controls.dart';
 
 class NumberTriviaPage extends ConsumerWidget {
-  final AsyncValue<NumberTrivia?>? asyncValue;
-  const NumberTriviaPage({super.key, this.asyncValue});
+  const NumberTriviaPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final numberTriviaAsync = asyncValue != null
-        ? asyncValue!
-        : ref.watch(numberTriviaProvider);
+    final numberTriviaAsync = ref.watch(numberTriviaProvider);
 
     // ref.listen<AsyncValue<NumberTrivia?>>(numberTriviaProvider, (
     //   previous,

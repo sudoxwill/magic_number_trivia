@@ -50,7 +50,7 @@ class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
       } else {
         final results = await numberTriviaLocalDataSource
             .getCachedNumberTrivias();
-        if (results.isEmpty) Left(NetworkFailure());
+        if (results.isEmpty) return Left(NetworkFailure());
         return Right(results.first);
       }
     } on CustomException catch (e) {
