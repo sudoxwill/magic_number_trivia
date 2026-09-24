@@ -17,20 +17,22 @@ class NumberTriviaNotifier extends AsyncNotifier<NumberTrivia?> {
   Future<void> getConcreteNumberTrivia(dynamic number) async {
     final usecase = ref.read(getConcreteNumberTriviaProvider);
     state = AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
-      final result = await usecase(number);
-      return result;
-    });
+    final result = await usecase(number);
+    result.fold(
+      (failure) => state = AsyncValue.error(failure, StackTrace.current),
+      (numberTrivia) => state = AsyncValue.data(numberTrivia),
+    );
     ref.invalidate(historyProvider);
   }
 
   Future<void> getRandomNumberTrivia() async {
     final usecase = ref.read(getRandomNumberTriviaProvider);
     state = AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
-      final result = await usecase(NoParam());
-      return result;
-    });
+    final result = await usecase(NoParam());
+    result.fold(
+      (failure) => state = AsyncValue.error(failure, StackTrace.current),
+      (numberTrivia) => state = AsyncValue.data(numberTrivia),
+    );
     ref.invalidate(historyProvider);
   }
 }

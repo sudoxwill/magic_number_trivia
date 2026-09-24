@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:number_trivia/core/error/exception.dart';
 import 'package:number_trivia/core/error/exceptions_mapper.dart';
 import 'package:number_trivia/core/error/failure.dart';
@@ -18,44 +19,46 @@ class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
     required this.numberTriviaLocalDataSource,
   });
   @override
-  Future<NumberTrivia> getConcreteNumberTrivia(int number) async {
+  Future<Either<Failure, NumberTrivia>> getConcreteNumberTrivia(
+    int number,
+  ) async {
     try {
       if (await networkInfo.isConnected()) {
-        return await numberTriviaRemoteDataSource.getConcreteNumberTrivia(
-          number,
-        );
+        final result = await numberTriviaRemoteDataSource
+            .getConcreteNumberTrivia(number);
+        return Right(result);
       } else {
         final results = await numberTriviaLocalDataSource
             .getCachedNumberTrivias();
-        if (results.isEmpty) throw NetworkFailure();
-        return results.first;
+        if (results.isEmpty) return Left(NetworkFailure());
+        return Right(results.first);
       }
     } on CustomException catch (e) {
-      throw fromExceptionToFailure(e);
-    } on NetworkFailure {
-      rethrow;
+      return Left(fromExceptionToFailure(e));
     } catch (e) {
-      throw UnexpectedFailure();
+      return Left(UnexpectedFailure());
     }
   }
 
   @override
-  Future<NumberTrivia> getRandomNumberTrivia() async {
+  Future<Either<Failure, NumberTrivia>> getRandomNumberTrivia() async {
     try {
       if (await networkInfo.isConnected()) {
-        return await numberTriviaRemoteDataSource.getRandomNumberTrivia();
+        final result = await numberTriviaRemoteDataSource
+            .getRandomNumberTrivia();
+        return Right(result);
       } else {
         final results = await numberTriviaLocalDataSource
             .getCachedNumberTrivias();
-        if (results.isEmpty) throw NetworkFailure();
-        return results.first;
+        if (results.isEmpty) Left(NetworkFailure());
+        return Right(results.first);
       }
     } on CustomException catch (e) {
-      throw fromExceptionToFailure(e);
+      return Left(fromExceptionToFailure(e));
     } on NetworkFailure {
       rethrow;
     } catch (e) {
-      throw UnexpectedFailure();
+      return Left(UnexpectedFailure());
     }
   }
 }
