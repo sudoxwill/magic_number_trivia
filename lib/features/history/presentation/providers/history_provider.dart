@@ -9,16 +9,21 @@ class HistoryNotifier extends AsyncNotifier<List<NumberTrivia>> {
   @override
   FutureOr<List<NumberTrivia>> build() async {
     final usecase = ref.read(getNumberTriviaHistoryProvider);
-    return await usecase(NoParam());
+    final result = await usecase(NoParam());
+    return result.fold(
+      (failure) => throw failure,
+      (numberTrivias) => numberTrivias,
+    );
   }
 
   Future<void> getNumberTriviaHistory() async {
     final usecase = ref.read(getNumberTriviaHistoryProvider);
     state = AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
-      final result = await usecase(NoParam());
-      return result;
-    });
+    final result = await usecase(NoParam());
+    result.fold(
+      (failure) => state = AsyncValue.error(failure, StackTrace.current),
+      (numberTrivias) => state = AsyncValue.data(numberTrivias),
+    );
   }
 }
 
