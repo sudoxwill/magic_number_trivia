@@ -55,8 +55,6 @@ class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
       }
     } on CustomException catch (e) {
       return Left(fromExceptionToFailure(e));
-    } on NetworkFailure {
-      rethrow;
     } catch (e) {
       return Left(UnexpectedFailure());
     }
